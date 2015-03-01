@@ -28,9 +28,12 @@
  */
 int compare(TYPE left, TYPE right)
 {
-    /*FIXME: write this*/
-
-
+  if ((struct data *)left->data < (struct data *)right->data)
+    return -1;
+  else if ((struct data *)left->data > (struct data *)right->data)
+    return 1;
+  else
+    return 0; 
 }
 
 /***************************************************************
@@ -58,7 +61,7 @@ void print_type(TYPE val)
 */
 TaskP createTask (int priority, char *desc)
 {
-  /*FIXME: Write this */
+   //FIXME
 }
 
 /*  Save the list to a file
