@@ -534,7 +534,7 @@ int _smallerIndexHeap(DynArr *heap, int i, int j, comparator compare)
       return i;
    else if(*compare(heap->data[i], heap->data[j]) == -1)
       return i;
-   return j
+   return j;
 }
 
 /*	Get the first node, which has the min priority, from the heap
@@ -622,7 +622,12 @@ post: v is a proper heap
 
 void _buildHeap(DynArr *heap, comparator compare)
 {
-   /* FIXME: Write This */
+   int max = heap->size;
+   int i = max/2 - 1;
+   while(i != -1){
+      _adjustHeap(heap, max, i, compare);
+      i--;
+   }
 }
 /*
    In-place sort of the heap
@@ -634,7 +639,13 @@ post: the dynArr is in reverse sorted order
 
 void sortHeap(DynArr *heap, comparator compare)
 {
-   /* FIXME: Write this */
+   int last = heap->size;
+   _buildHeap(heap, compare);
+   while(last != -1){
+      _adjustHeap(heap, last, 0, compare);
+      swapDynArr(heap, 0, last);
+      last--;
+   }
 }
 
 
