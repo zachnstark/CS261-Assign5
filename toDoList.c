@@ -28,9 +28,12 @@
  */
 int compare(TYPE left, TYPE right)
 {
-  if ((struct data *)left->data < (struct data *)right->data)
+  struct Task *leftData = (struct Task *)left;
+  struct Task *rightData = (struct Task *)right;
+
+  if (leftData->priority < rightData->priority)
     return -1;
-  else if ((struct data *)left->data > (struct data *)right->data)
+  else if (leftData->priority > rightData->priority)
     return 1;
   else
     return 0; 
@@ -61,7 +64,11 @@ void print_type(TYPE val)
 */
 TaskP createTask (int priority, char *desc)
 {
-   //FIXME
+   TaskP dummy = (TaskP)malloc(sizeof(struct Task));
+   strcpy(dummy->description, desc);
+   dummy->priority = priority;
+
+   return dummy;
 }
 
 /*  Save the list to a file
@@ -113,7 +120,7 @@ void loadList(DynArr *heap, FILE *filePtr)
     {
       sscanf(line, "%d\t%[^\n]", &priority, desc);
       task = createTask(priority, desc);
-      addHeap(heap, task, compare);
+      addDynArrOrd(heap, task, compare);
     } /* should use feof to make sure it found eof and not error*/
 
 }
