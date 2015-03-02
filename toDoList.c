@@ -120,7 +120,7 @@ void loadList(DynArr *heap, FILE *filePtr)
     {
       sscanf(line, "%d\t%[^\n]", &priority, desc);
       task = createTask(priority, desc);
-      addDynArrOrd(heap, task, compare);
+      addHeap(heap, task, compare);
     } /* should use feof to make sure it found eof and not error*/
 
 }
@@ -148,15 +148,13 @@ void printList(DynArr *heap)
     {
       /* get the task */
       /* BINHEAP FIXME */
-      /* task = getMinHeap(temp); */
-      task = getDynArr(temp,0);
+      task = getMinHeap(temp);
 
       /* print the task */
       printf("%d:  %s\n\n", task->priority, task->description);
       /* remove the task , but let's not free up the memory it's pointing to since old Arr is using it!*/
       /* BINHEAP FIXME */
-      /*removeMinHeap(temp); */
-      removeAtDynArr(temp, 0);
+      removeMinHeap(temp, compare); 
     }
   /* free the temp list */
   deleteDynArr(temp);

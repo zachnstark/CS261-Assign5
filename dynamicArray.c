@@ -532,7 +532,7 @@ int _smallerIndexHeap(DynArr *heap, int i, int j, comparator compare)
       return j;
    else if(heap->data[j] == 0)
       return i;
-   else if(*compare(heap->data[i], heap->data[j]) == -1)
+   else if((*compare)(heap->data[i], heap->data[j]) == -1)
       return i;
    return j;
 }
@@ -561,8 +561,8 @@ void addHeap(DynArr *heap, TYPE val, comparator  compare)
    addDynArr(heap, val);
    int i = heap->size - 1;
    while(i != -1){
-      int j = (i-2)/2;
-      if(compare(heap->data[i], heap->data[j]) == -1){
+      int j = (i-1)/2;
+      if((*compare)(heap->data[i], heap->data[j]) == -1){
 	 swapDynArr(heap, i, j);
 	 i = j;
       }
@@ -582,20 +582,43 @@ post:	heap property is maintained for nodes from index pos to index max-1  (ie. 
 
 void _adjustHeap(DynArr *heap, int max, int pos, comparator compare)
 {
-   assert(pos < max);
-   assert(max <= size);
+   assert(max <= heap->size);
    assert(heap->data != 0);
    int idxSmall = 0;
-   int i = 0;
-   while(heap->data[2*i + 1] != 0){
+   int i = pos;
+
+   int leftIdx = pos * 2 + 1;
+   int rightIdx = pos * 2 + 2;
+
+   if (rightIdx < max)
+   {
+      idxSmall = _smallerIndexHeap(heap, leftIdx, rightIdx, compare);
+      if ((*compare)(heap->data[i], heap->data[idxSmall]) == 1)
+      {
+         swapDynArr(heap, i, idxSmall);
+	 _adjustHeap(heap, max, idxSmall, compare);
+      }
+      
+   }
+   else if (leftIdx < max)
+   {
+      if ((*compare)(heap->data[i], heap->data[leftIdx]) == 1)
+      {
+	 swapDynArr(heap, i, leftIdx);
+	 _adjustHeap(heap, max, leftIdx, compare);
+      }
+   }
+
+   /*
+   while(heap->data[2*i + 1] != 0 || heap->data[2*i + 2] != 0){
       idxSmall = _smallerIndexHeap(heap, 2*i + 1, 2*i +2, compare);
-      if(compare(heap->data[i], idxSmall) == 1){
+      if((*compare)(heap->data[i], heap->data[idxSmall]) == 1){
 	 swapDynArr(heap, i, idxSmall);
 	 i = idxSmall;
       }
       else
 	 i = heap->size;
-   }
+   }*/
 }
 
 /*	Remove the first node, which has the min priority, from the heap
@@ -639,11 +662,11 @@ post: the dynArr is in reverse sorted order
 
 void sortHeap(DynArr *heap, comparator compare)
 {
-   int last = heap->size;
+   int last = (heap->size - 1);
    _buildHeap(heap, compare);
    while(last != -1){
-      _adjustHeap(heap, last, 0, compare);
       swapDynArr(heap, 0, last);
+      _adjustHeap(heap, last, 0, compare);
       last--;
    }
 }
