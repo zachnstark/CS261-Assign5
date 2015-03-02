@@ -48,16 +48,19 @@ int main (int argc, const char * argv[])
 	    addHeap(mainList, dummy, compare);
 	    printf("The task '%s' has been added to the to-do list.\n", description);
 	 case 'g':
-	    if (mainList->data[0] != 0)
-	       printf("The first task is %s \n", getMinHeap(mainList)->description);
+	    if (!isEmptyDynArr(mainList))
+	       printf("The first task is %s \n", ((struct Task *)getMinHeap(mainList))->description);
 	    else
 	       printf("Your to-do list is empty!\n");
 	 case 'r':
+	    description = ((struct Task *)getMinHeap(mainList))->description;
+	    removeMinHeap(mainList, compare);
+	    printf("Your first task '%s' has been removed from the list.\n");
 	 case 'p':
+	    printList(mainList);
 	 case 'e':
+	    printf("Bye!");
       }
-
-      /* Fixme:  Your logic goes here! */
 
       /* Note: We have provided functions called printList(), saveList() and loadList() for you
          to use.  They can be found in toDoList.c */
