@@ -1,3 +1,9 @@
+/*Authors: Zachary and Kyle
+ *VIM
+ *3/4/2015
+ *Assignment5
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
