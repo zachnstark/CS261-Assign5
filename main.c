@@ -7,8 +7,9 @@
 
 int main (int argc, const char * argv[])
 {
-  char *filename;
-  char *description;
+  char *filename = malloc(sizeof(char)*250);
+  char *description = malloc(sizeof(char)*250);
+//  char *dummy2 = malloc(sizeof(char)*250);
   int priority;
   char cmd = ' ';
   DynArr* mainList = createDynArr(10);
@@ -34,36 +35,64 @@ int main (int argc, const char * argv[])
       switch (cmd)
       {
 	 case 'l':
-	    scanf("Please enter the filename: %s \n", filename);
+	    printf("Please enter the filenmae: ");
+	    fgets(filename, 100, stdin);
+	    if(filename[strlen(filename) - 1] == '\n')
+	       filename[strlen(filename) - 1] = 0;
 	    FILE *reader = fopen(filename, "r");
 	    loadList(mainList, reader);
+	    printf("The list has been loaded from file successfully. \n");
+	    break;
 	 case 's':
-	    scanf("Please enter the filename: %s \n", filename);
+	    printf("Please enter the filename: ");
+	    fgets(filename, 100, stdin);
+	    if(filename[strlen(filename) - 1] == '\n')
+	       filename[strlen(filename) - 1] = 0;
 	    FILE *writer = fopen(filename, "w+");
 	    saveList(mainList, writer);
+	    printf("The list has been saved into the file successfully. \n");
+	    break;
 	 case 'a':
-	    scanf("Please enter the task description: %s \n", description);
-	    scanf("Please enter the task priority (0-999): %d \n", priority);
+	    printf("Please enter the task description: ");
+	    fgets(description, 100, stdin);
+	    if(description[strlen(description) - 1] == '\n')
+	       description[strlen(description) - 1] = 0;
+	    printf("Please enter the task priority (0-999): ");
+	    scanf("%d", &priority);
+	    while (getchar() != '\n');
 	    TaskP dummy = createTask(priority, description);
 	    addHeap(mainList, dummy, compare);
 	    printf("The task '%s' has been added to the to-do list.\n", description);
+	    break;
 	 case 'g':
 	    if (!isEmptyDynArr(mainList))
 	       printf("The first task is %s \n", ((struct Task *)getMinHeap(mainList))->description);
 	    else
 	       printf("Your to-do list is empty!\n");
+	    break;
 	 case 'r':
-	    description = ((struct Task *)getMinHeap(mainList))->description;
-	    removeMinHeap(mainList, compare);
-	    printf("Your first task '%s' has been removed from the list.\n");
+	    if (isEmptyDynArr(mainList))
+	       printf("The list is empty! \n");
+	    else {
+	       description = ((struct Task *)getMinHeap(mainList))->description;
+	       removeMinHeap(mainList, compare);
+	       printf("Your first task '%s' has been removed from the list.\n", description);
+
+	    }
+	    break;
 	 case 'p':
-	    printList(mainList);
+	    if(isEmptyDynArr(mainList))
+	       printf("the list is empty!\n");
+	    else
+	       printList(mainList);
+	    break;
 	 case 'e':
-	    printf("Bye!");
+	    printf("Bye! \n");
+	    break;
       }
 
       /* Note: We have provided functions called printList(), saveList() and loadList() for you
-         to use.  They can be found in toDoList.c */
+	 to use.  They can be found in toDoList.c */
     }
   while(cmd != 'e');
   /* delete the list */

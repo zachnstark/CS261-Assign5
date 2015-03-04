@@ -210,7 +210,7 @@ post:	index pos contains new value, val
 void putDynArr(DynArr *v, int pos, TYPE val)
 {
    assert(v!=0);
-   assert(pos < v->size);
+   assert(pos <= v->size);
    assert(pos >= 0);
    v->data[pos] = val;
 }
